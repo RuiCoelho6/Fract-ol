@@ -6,11 +6,39 @@
 /*   By: rpires-c <rpires-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 16:43:18 by rpires-c          #+#    #+#             */
-/*   Updated: 2024/08/14 16:11:27 by rpires-c         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:02:40 by rpires-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+
+
+int	mouse_scroll(int button, int x, int y, t_mlx_data *mlx)
+{
+    (void)x;
+    (void)y;
+
+    if (button == Button4)
+    {
+        mlx->zoom += 20;
+        if (mlx->zoom > INT_MAX)
+			mlx->zoom = INT_MAX;
+    }
+    else if (button == Button5)
+    {
+        mlx->zoom -= 10;
+        if (mlx->zoom < 1)
+			mlx->zoom = 1;
+    }
+    else
+        return (0); 
+    mlx_clear_window(mlx->mlx_ptr, mlx->window_ptr);
+    if (!ft_strncmp(mlx->name, "mandelbrot", 12))
+        draw_man(mlx);
+    else if (!ft_strncmp(mlx->name, "julia", 6))
+        draw_julia(mlx);
+    return (0);
+}
 
 int	handle_no_event(void *mlx)
 {
@@ -24,6 +52,7 @@ int	murder_window(t_mlx_data *mlx)
 	mlx_destroy_display(mlx->mlx_ptr);
 	free(mlx->mlx_ptr);
 	free(mlx->img);
+	free(mlx->cmp_nbrs);
 	exit(1);
 	return (0);
 }
@@ -35,46 +64,17 @@ int	murder_window_key(int keysym, t_mlx_data *mlx)
 	return (0);
 }
 
-static double ft_atod(const char *nptr)
+void	init_all_vars(t_mlx_data *mlx)
 {
-	double sum;
-	double frac;
-	int sign;
-	int i;
-	int frac_div;
-
-	i = 0;
-	sum = 0.0;
-	frac = 0.0;
-	sign = 1;
-	frac_div = 1;
-	if (nptr[i++] == '-')
-		sign = -1;
-	else if (nptr[i] == '+')
-		i++;
-	while (nptr[i] && ft_isdigit(nptr[i]))
-		sum = sum * 10 + (nptr[i++] - '0');
-	if (nptr[i] == '.' || nptr[i] == ',')
-		i++;
-	while (nptr[i] && ft_isdigit(nptr[i]))
-	{
-		frac = frac * 10 + (nptr[i++] - '0');
-		frac_div *= 10;
-	}
-	sum = sum + (frac / frac_div);
-	return (sign * sum);
-}
-
-static void	init_all_vars(t_mlx_data *mlx, t_cmp *cmp)
-{
-	mlx->zoom = 1.0;
+	mlx->zoom = 150;
 	mlx->iter_max = 100;
 	mlx->img = (t_img_data *)ft_calloc(1, sizeof(t_img_data));
 	mlx->img->bits_per_pixel = 0;
 	mlx->img->line_length = 0;
 	mlx->img->endian = 0;
-	cmp->real = 0.0;
-	cmp->imaginary = 0.0;
+	mlx->cmp_nbrs = (t_cmp *)ft_calloc(1, sizeof(t_cmp));
+	mlx->cmp_nbrs->real = 0.0;
+	mlx->cmp_nbrs->imaginary = 0.0;
 }
 
 void	init(t_mlx_data *mlx)
@@ -95,23 +95,23 @@ void	init(t_mlx_data *mlx)
 int	main (int ac, char **av)
 {
 	t_mlx_data	mlx;
-	t_cmp 		z;
 	int		i;
 
 	i = -1;
-	init_all_vars(&mlx, &z);
+	init_all_vars(&mlx);
 	init(&mlx);
 	while (av[1][++i] != 0)
 		av[1][i] = ft_tolower(av[1][i]);
-	if (!ft_strncmp(av[1], "mandelbrot", 12))
-		draw_man(&mlx, mlx.img);
-	else if (!ft_strncmp(av[1], "julia", 6))
+	mlx.name = av[1];
+	if (!ft_strncmp(mlx.name, "mandelbrot", 12))
+		draw_man(&mlx);
+	else if (!ft_strncmp(mlx.name, "julia", 6))
 		{
-			z.real = ft_atod(av[2]);
-			z.imaginary = ft_atod(av[3]);
-			// draw_julia();
+			get_nbrs(&mlx, av);
+			draw_julia(&mlx);
 		}
 	mlx_loop_hook(mlx.mlx_ptr, &handle_no_event, &mlx);
+	mlx_mouse_hook(mlx.window_ptr, &mouse_scroll, &mlx);
 	mlx_hook(mlx.window_ptr, KeyPress, KeyPressMask, &murder_window_key, &mlx);
 	mlx_hook(mlx.window_ptr, ClientMessage, NoEventMask, &murder_window, &mlx);
 	mlx_loop(mlx.mlx_ptr);

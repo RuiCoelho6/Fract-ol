@@ -6,7 +6,7 @@
 /*   By: rpires-c <rpires-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 13:45:44 by rpires-c          #+#    #+#             */
-/*   Updated: 2024/08/14 16:11:47 by rpires-c         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:43:09 by rpires-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define FRACTOL_H
 # define WIDTH 666
 # define HEIGHT 420
-# define SCALE 150
 #define REF_WIDTH (WIDTH / 2)
 #define REF_HEIGHT (HEIGHT / 2)
 
@@ -24,6 +23,7 @@
 # include <X11/keysym.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <limits.h>
 # include <stdio.h>
 # include <stdbool.h>
 # include <fcntl.h>
@@ -41,21 +41,27 @@ typedef struct s_img_data
 	int		endian;
 }			t_img_data;
 
-typedef struct s_mlx_data
-{
-	void	*mlx_ptr;
-	void	*window_ptr;
-	double	zoom;
-	t_img_data	*img;
-	int		iter_max;
-}			t_mlx_data;
-
 typedef struct s_cmp
 {
 	double	real;
 	double	imaginary;
 }			t_cmp;
 
+typedef struct s_mlx_data
+{
+	void		*mlx_ptr;
+	void		*window_ptr;
+	char		*name;
+	double		zoom;
+	t_img_data	*img;
+	t_cmp		*cmp_nbrs;
+	int			iter_max;
+}			t_mlx_data;
+
+void get_nbrs(t_mlx_data *mlx, char **av);
+double	ft_atod(const char *str);
+t_cmp convert(int x, int y, t_mlx_data *mlx);
 void	my_mlx_pixel_put(t_img_data *img_data, int x, int y, int color);
-void	draw_man(t_mlx_data *mlx, t_img_data *img);
+void	draw_man(t_mlx_data *mlx);
+void	draw_julia(t_mlx_data *mlx);
 #endif
