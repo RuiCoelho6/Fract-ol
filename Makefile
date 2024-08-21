@@ -6,7 +6,7 @@
 #    By: rpires-c <rpires-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 16:43:10 by rpires-c          #+#    #+#              #
-#    Updated: 2024/08/15 12:24:39 by rpires-c         ###   ########.fr        #
+#    Updated: 2024/08/21 16:43:51 by rpires-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJECT = $(SOURCES:.c=.o)
 
 FLAGS = -Wall -Werror -Wall
 
-all: $(NAME)
+all: start_minilibx  $(NAME)
 
 $(NAME): $(OBJECT)
 	cc -g $(FLAGS) -lm -Iinc/mlx-linux $(SOURCES) -lXext -lX11 -Linc/minilibx-linux -lmlx -o fractol
@@ -39,11 +39,16 @@ $(NAME): $(OBJECT)
 
 clean:
 	rm -f  $(OBJECT)
+	@make clean -C ./inc/minilibx-linux/
 
 fclean: clean
-	rm -f $(NAME) 
+	rm -f $(NAME)
+	@make clean -C ./inc/minilibx-linux/
 
 re: fclean all
+
+start_minilibx:
+	@make -C ./inc/minilibx-linux/
 
 exec:
 	cc -g $(FLAGS) -lm -Iinc/mlx-linux $(SOURCES) -lXext -lX11 -Linc/minilibx-linux -lmlx -o fractol
