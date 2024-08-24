@@ -6,7 +6,7 @@
 /*   By: rpires-c <rpires-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 15:48:06 by rpires-c          #+#    #+#             */
-/*   Updated: 2024/08/16 15:27:09 by rpires-c         ###   ########.fr       */
+/*   Updated: 2024/08/24 16:51:43 by rpires-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	count_iter_jul(t_cmp c, t_cmp *cmp_nbrs, t_mlx_data *mlx)
 	z = c;
 	while (iter < mlx->iter_max)
 	{
-		if((z.real * z.real + z.imaginary * z.imaginary) > 4)
+		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
 			return (iter);
 		temp = z.real;
 		z.real = z.real * z.real - z.imaginary * z.imaginary + cmp_nbrs->real;
@@ -32,30 +32,49 @@ int	count_iter_jul(t_cmp c, t_cmp *cmp_nbrs, t_mlx_data *mlx)
 	return (mlx->iter_max);
 }
 
+int	*init_colors(void)
+{
+	int	*colors;
+
+	colors = NULL;
+	colors = (int *)malloc(9 * sizeof(int));
+	if (!colors)
+		return (0);
+	colors[0] = RED;
+	colors[1] = BLUE;
+	colors[2] = GREEN;
+	colors[3] = ORANGE;
+	colors[4] = PURPLE;
+	colors[5] = YELLOW;
+	colors[6] = CYAN;
+	colors[7] = MAGENTA;
+	colors[8] = WHITE;
+	return (colors);
+}
+
 void	draw_julia(t_mlx_data *mlx)
 {
+	int		x;
+	int		y;
 	t_cmp	z;
-	double	i;
-	double	j;
 	int		iter;
-	int		color;
-	int colors[] = {RED, BLUE, GREEN, ORANGE, PURPLE, YELLOW, CYAN, MAGENTA, WHITE};
+	int		*colors;
 
-	i = 0;
-	iter = 0;
-	while (i++ < WIDTH)
+	colors = init_colors();
+	x = 0;
+	while (x++ < WIDTH)
 	{
-		j = 0;
-		while (j++ < HEIGHT)
+		y = 0;
+		while (y++ < HEIGHT)
 		{
-			z = convert(i, j, mlx);
-			if (iter == mlx->iter_max)
-			    color = BLACK;
-            else
-                color = colors[iter % NUM_COLORS];
+			z = convert(x, y, mlx);
 			iter = count_iter_jul(z, mlx->cmp_nbrs, mlx);
-			my_mlx_pixel_put(mlx->img, i, j, color);
+			if (iter == mlx->iter_max)
+				my_mlx_pixel_put(mlx->img, x, y, BLACK);
+			else
+				my_mlx_pixel_put(mlx->img, x, y, colors[iter % NUM_COLORS]);
 		}
 	}
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->window_ptr, mlx->img->ptr, 0, 0);
+	free(colors);
 }

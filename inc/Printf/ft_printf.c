@@ -37,10 +37,10 @@ static int	identifier(char id, va_list args)
 
 int	ft_printf(const char *str, ...)
 {
-	int			i;
-	int			num_percentagens;
-	int			cont;
-	va_list		args;
+	int		i;
+	int		num_percentagens;
+	int		cont;
+	va_list	args;
 
 	num_percentagens = 0;
 	i = 0;
@@ -73,11 +73,17 @@ int	ft_printf(const char *str, ...)
 
     int i;
     printf("Printf replica:\n");
-    i = ft_printf("| TEST TEXT |\n| Single Char: %c |\n| String: %s |\n| Pointer Adress: %p |\n| Decimal: %d |\n| Integer %i |\n| Unsign deci: %u |\n| HexLower: %x |\n| HexUpper: %X |\n| Percentage sign: %% |\n", c, str, var, nbr, nbr, nbrr, b, b);
+    i = ft_printf("| TEST TEXT |\n| Single Char: %c |\n| String:
+		%s |\n| Pointer Adress: %p |\n| Decimal: %d |\n| Integer
+		%i |\n| Unsign deci: %u |\n| HexLower: %x |\n| HexUpper:
+		%X |\n| Percentage sign: %% |\n", c, str, var, nbr, nbr, nbrr, b, b);
     printf("\nReturn Value: %d", i);
     ///////////////////////////////
     printf("\nPrintf original:\n");
-    i = printf("| TEST TEXT |\n| Single Char: %c |\n| String: %s |\n| Pointer Adress: %p |\n| Decimal: %d |\n| Integer %i |\n| Unsign deci: %u |\n| HexLower: %x |\n| HexUpper: %X |\n| Percentage sign: %% |\n", c, str, var, nbr, nbr, nbrr, b, b);
+    i = printf("| TEST TEXT |\n| Single Char: %c |\n| String:
+		%s |\n| Pointer Adress: %p |\n| Decimal: %d |\n| Integer
+		%i |\n| Unsign deci: %u |\n| HexLower: %x |\n| HexUpper:
+		%X |\n| Percentage sign: %% |\n", c, str, var, nbr, nbr, nbrr, b, b);
     printf("\nReturn Value: %d", i);
     return (0);
 }*/

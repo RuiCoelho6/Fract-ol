@@ -6,13 +6,13 @@
 #    By: rpires-c <rpires-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 16:43:10 by rpires-c          #+#    #+#              #
-#    Updated: 2024/08/21 16:43:51 by rpires-c         ###   ########.fr        #
+#    Updated: 2024/08/24 16:47:07 by rpires-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
-SOURCES = main.c utils.c mandelbrot.c julia.c \
+SOURCES = main.c utils.c mandelbrot.c julia.c hooks.c\
 inc/Printf/ft_printf.c \
 inc/Printf/ft_putchar.c \
 inc/Printf/ft_print_pointer.c \
