@@ -29,7 +29,7 @@ OBJECT = $(SOURCES:.c=.o)
 
 FLAGS = -Wall -Werror -Wall
 
-all: start_minilibx  $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJECT)
 	cc -g $(FLAGS) -lm -Iinc/mlx-linux $(SOURCES) -lXext -lX11 -Linc/minilibx-linux -lmlx -o fractol
@@ -39,16 +39,11 @@ $(NAME): $(OBJECT)
 
 clean:
 	rm -f  $(OBJECT)
-	@make clean -C ./inc/minilibx-linux/
 
 fclean: clean
 	rm -f $(NAME)
-	@make clean -C ./inc/minilibx-linux/
 
 re: fclean all
-
-start_minilibx:
-	@make -C ./inc/minilibx-linux/
 
 exec:
 	cc -g $(FLAGS) -lm -Iinc/mlx-linux $(SOURCES) -lXext -lX11 -Linc/minilibx-linux -lmlx -o fractol
